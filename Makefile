@@ -1,11 +1,21 @@
-include $(DEVKITARM)/base_tools
-export CPP := $(PREFIX)cpp
-export LD := $(PREFIX)ld
+TOOLCHAIN := $(DEVKITARM)
+COMPARE ?= 0
 
-ifeq ($(OS),Windows_NT)
-EXE := .exe
-else
-EXE :=
+ifeq (compare,$(MAKECMDGOALS))
+  COMPARE := 1
+endif
+
+# don't use dkP's base_tools anymore
+# because the redefinition of $(CC) conflicts
+# with when we want to use $(CC) to preprocess files
+# thus, manually create the variables for the bin
+# files, or use arm-none-eabi binaries on the system
+# if dkP is not installed on this system
+
+ifneq (,$(TOOLCHAIN))
+ifneq ($(wildcard $(TOOLCHAIN)/bin),)
+export PATH := $(TOOLCHAIN)/bin:$(PATH)
+endif
 endif
 
 TITLE       := POKEMON EMER

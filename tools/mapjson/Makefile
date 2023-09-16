@@ -1,4 +1,4 @@
-CXX := g++
+CXX ?= g++
 
 CXXFLAGS := -Wall -std=c++11 -O2
 
@@ -6,9 +6,18 @@ SRCS := json11.cpp mapjson.cpp
 
 HEADERS := mapjson.h
 
-.PHONY: clean
+ifeq ($(OS),Windows_NT)
+EXE := .exe
+else
+EXE :=
+endif
 
-mapjson: $(SRCS) $(HEADERS)
+.PHONY: all clean
+
+all: mapjson$(EXE)
+	@:
+
+mapjson$(EXE): $(SRCS) $(HEADERS)
 	$(CXX) $(CXXFLAGS) $(SRCS) -o $@ $(LDFLAGS)
 
 clean:
